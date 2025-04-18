@@ -18,13 +18,18 @@ export const editBook = async (db: PrismaClient, input: UpdateBookType) => {
   const { id, ...data } = input;
   console.log("Received input:", input);
 
+  const oldData = await db.book.findFirst({
+    where: {
+      id,
+    },
+  });
   const checkBook = await db.book.findFirst({
     where: {
       title: data.title,
     },
   });
 
-  if (checkBook) {
+  if (oldData && checkBook && oldData.title != checkBook.title) {
     handleError("Book with that title already exist", "BAD_REQUEST");
     return;
   }
@@ -39,4 +44,8 @@ export const editBook = async (db: PrismaClient, input: UpdateBookType) => {
       publisher: data.publisher,
     },
   });
+};
+
+export const getCategories = async (db: PrismaClient) => {
+  return await db.category.findMany();
 };

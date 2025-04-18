@@ -1,5 +1,4 @@
-"use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -22,7 +21,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
@@ -48,19 +46,19 @@ export type Book = {
 interface DataTableProps {
   setOpenEdit: (open: boolean) => void;
   setOpenDelete: (open: boolean) => void;
+  setSelectedBook: (book: Book) => void;
 }
+
 export default function DataTable({
   setOpenEdit,
   setOpenDelete,
+  setSelectedBook,
 }: DataTableProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const booksData = api.book.getAllBooks.useQuery({});
-  useEffect(() => {
-    console.log(booksData.data);
-  }, [booksData.data]);
+  const { data: fetchBook } = api.book.getAllBooks.useQuery({});
 
   const columns: ColumnDef<Book>[] = [
     {
@@ -132,8 +130,7 @@ export default function DataTable({
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
-        const books = row.original;
-
+        const book = row.original;
         return (
           <div className="flex items-center justify-center">
             <DropdownMenu>
@@ -145,10 +142,16 @@ export default function DataTable({
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-[#e0ecfc]">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem className="bg-[#e0ecfc]">
+                <DropdownMenuItem
+                  className="bg-[#e0ecfc]"
+                  onClick={() => {
+                    setSelectedBook(book);
+                    setOpenEdit(true);
+                  }}
+                >
                   <div className="flex gap-2">
                     <Pencil />
-                    <button onClick={() => setOpenEdit(true)}>Edit Book</button>
+                    <span>Edit Book</span>
                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="bg-[#e0ecfc]">
@@ -167,8 +170,14 @@ export default function DataTable({
     },
   ];
 
+  const sortedBooks = React.useMemo(() => {
+    return (fetchBook ?? [])
+      .slice()
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }, [fetchBook]);
+
   const table = useReactTable({
-    data: booksData.data ?? [],
+    data: sortedBooks,
     columns,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -197,7 +206,10 @@ export default function DataTable({
         />
       </div>
       <div>
-        <Table className="border-2">
+        <Table
+          key={JSON.stringify(sortedBooks.map((b) => b.id))}
+          className="border-2"
+        >
           <TableHeader className="font-heading">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow

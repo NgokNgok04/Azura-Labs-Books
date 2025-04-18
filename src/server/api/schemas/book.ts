@@ -14,5 +14,6 @@ export const UpdateBookQuerySchema = z.object({
   title: z.string().optional(),
   author: z.string().optional(),
   publisher: z.string().optional(),
+  publicationDate: z.date().optional(),
   categoryId: z.number().optional(),
 });
