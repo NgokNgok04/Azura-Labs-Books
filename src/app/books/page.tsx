@@ -7,6 +7,9 @@ export default function Books() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [refetchTrigger, setRefetchTrigger] = useState<() => void>(() => {
+    console.log();
+  });
   const [refreshKey, setRefreshKey] = useState(0);
   return (
     <div className="flex min-h-screen flex-col items-center justify-center sm:px-10">
@@ -15,6 +18,7 @@ export default function Books() {
         open={openEdit}
         setOpen={setOpenEdit}
         book={selectedBook}
+        refetchBooks={refetchTrigger}
         setRefreshKey={setRefreshKey}
         refreshKey={refreshKey}
       />
@@ -30,6 +34,7 @@ export default function Books() {
         setOpenEdit={setOpenEdit}
         setOpenDelete={setOpenDelete}
         setSelectedBook={setSelectedBook}
+        onRegisterRefetch={setRefetchTrigger}
       />
     </div>
   );

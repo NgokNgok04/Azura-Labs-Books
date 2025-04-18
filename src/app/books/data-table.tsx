@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable @typescript-eslint/no-misused-promises */
+import { useEffect, useState } from "react";
 import {
   type ColumnDef,
   type ColumnFiltersState,
@@ -47,18 +48,24 @@ interface DataTableProps {
   setOpenEdit: (open: boolean) => void;
   setOpenDelete: (open: boolean) => void;
   setSelectedBook: (book: Book) => void;
+  onRegisterRefetch: (refetchFn: () => void) => void;
 }
 
 export default function DataTable({
   setOpenEdit,
   setOpenDelete,
   setSelectedBook,
+  onRegisterRefetch,
 }: DataTableProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const { data: fetchBook } = api.book.getAllBooks.useQuery({});
+  const { data: fetchBook, refetch } = api.book.getAllBooks.useQuery({});
+
+  useEffect(() => {
+    onRegisterRefetch(refetch);
+  }, [refetch, onRegisterRefetch]);
 
   const columns: ColumnDef<Book>[] = [
     {

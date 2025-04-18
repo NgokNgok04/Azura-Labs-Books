@@ -37,7 +37,6 @@ interface actionProps {
   book?: Book | null;
   setOpen: (open: boolean) => void;
   onClick?: () => void;
-  refetchBooks?: () => void;
   setRefreshKey: (value: number) => void;
   refreshKey: number;
 }
@@ -64,7 +63,6 @@ export default function ActionDialog({
   open,
   setOpen,
   book,
-  refetchBooks,
   setRefreshKey,
   refreshKey,
 }: actionProps) {
@@ -106,7 +104,6 @@ export default function ActionDialog({
       },
       {
         onSuccess: () => {
-          //   refetchBooks?.();
           setRefreshKey(refreshKey + 1);
           form.reset();
           setOpen(false);
