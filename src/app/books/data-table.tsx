@@ -8,11 +8,10 @@ import {
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  type SortingState,
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import * as React from "react";
 
@@ -20,7 +19,6 @@ import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -47,18 +45,12 @@ export type Book = {
   categoryId: number;
 };
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
 export const columns: ColumnDef<Book>[] = [
   {
     id: "select",
     header: ({ table }) => (
       <Checkbox
+        className="p-0"
         checked={
           table.getIsAllPageRowsSelected() ||
           (table.getIsSomePageRowsSelected() && "indeterminate")
@@ -69,6 +61,7 @@ export const columns: ColumnDef<Book>[] = [
     ),
     cell: ({ row }) => (
       <Checkbox
+        className="p-0"
         checked={row.getIsSelected()}
         onCheckedChange={(value) => row.toggleSelected(!!value)}
         aria-label="Select row"
@@ -78,48 +71,45 @@ export const columns: ColumnDef<Book>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "title",
+    header: "Title",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("title")}</div>
     ),
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="noShadow"
-          size="sm"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "author",
+    header: "Author",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("author")}</div>
+    ),
+  },
+
+  {
+    accessorKey: "publisher",
+    header: "Publisher",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("publisher")}</div>
+    ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    accessorKey: "publicationDate",
+    header: "Publication Date",
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="font-base text-right">{formatted}</div>;
+      const date = new Date(row.getValue("publicationDate"));
+      const formattedDate = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+      return <div>{formattedDate}</div>;
     },
   },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const books = row.original;
 
       return (
         <DropdownMenu>
@@ -132,7 +122,7 @@ export const columns: ColumnDef<Book>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(String(books.id))}
             >
               Copy payment ID
             </DropdownMenuItem>
@@ -156,7 +146,7 @@ export default function DataTableDemo() {
     console.log(booksData.data);
   }, [booksData.data]);
   const table = useReactTable({
-    data: booksData,
+    data: booksData.data ?? [],
     columns,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
@@ -176,40 +166,13 @@ export default function DataTableDemo() {
     <div className="font-base text-main-foreground w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          placeholder="Filter..."
+          value={(table.getColumn("author")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("author")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="noShadow" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div>
         <Table>
@@ -221,7 +184,10 @@ export default function DataTableDemo() {
               >
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead className="text-foreground" key={header.id}>
+                    <TableHead
+                      className="text-foreground border-2 bg-[#5894fc] p-0 text-center"
+                      key={header.id}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -238,12 +204,12 @@ export default function DataTableDemo() {
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
-                  className="bg-secondary-background text-foreground data-[state=selected]:bg-main data-[state=selected]:text-main-foreground"
+                  className="text-foreground data-[state=selected]:bg-main data-[state=selected]:text-main-foreground"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell className="px-4 py-2" key={cell.id}>
+                    <TableCell className="px-2 py-2" key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext(),
