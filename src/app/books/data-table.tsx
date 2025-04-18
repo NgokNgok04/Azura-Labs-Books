@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { useEffect, useState } from "react";
 import {
@@ -11,16 +14,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import {
-  Book,
-  BookA,
-  BookDown,
-  BookPlusIcon,
-  MoreHorizontal,
-  Pencil,
-  Plus,
-  Trash2,
-} from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import * as React from "react";
 
@@ -68,7 +62,9 @@ export default function DataTable({
   setSelectedBook,
   onRegisterRefetch,
 }: DataTableProps) {
+  const [globalFilter, setGlobalFilter] = useState("");
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -203,7 +199,7 @@ export default function DataTable({
   const table = useReactTable({
     data: sortedBooks,
     columns,
-    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -212,8 +208,15 @@ export default function DataTable({
     onRowSelectionChange: setRowSelection,
     state: {
       columnFilters,
+      globalFilter,
       columnVisibility,
       rowSelection,
+    },
+    globalFilterFn: (row, columnId, filterValue) => {
+      const { title, author, publisher } = row.original;
+      return [title, author, publisher].some((field) =>
+        field.toLowerCase().includes(filterValue.toLowerCase()),
+      );
     },
   });
 
@@ -221,11 +224,9 @@ export default function DataTable({
     <div className="font-base text-main-foreground w-full">
       <div className="flex items-center justify-between py-4">
         <Input
-          placeholder="Filter..."
-          value={(table.getColumn("author")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("author")?.setFilterValue(event.target.value)
-          }
+          placeholder="Search title, author, publisher..."
+          value={globalFilter}
+          onChange={(event) => setGlobalFilter(event.target.value)}
           className="max-w-sm"
         />
         <div className="flex w-[210px] justify-between">
