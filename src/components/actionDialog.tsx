@@ -32,9 +32,9 @@ import type { Book } from "~/app/books/data-table";
 import { useEffect } from "react";
 
 interface actionProps {
-  type: "edit" | "delete";
+  type: "edit" | "delete" | "create";
   open: boolean;
-  book: Book | null;
+  book?: Book | null;
   setOpen: (open: boolean) => void;
   setRefreshKey: (value: number) => void;
   refreshKey: number;
@@ -90,25 +90,36 @@ export default function ActionDialog({
 
   const categories = api.book.getCategories.useQuery();
   const updateBook = api.book.editBook.useMutation();
+  const createBook = api.book.createBook.useMutation();
   const onSubmit = (data: z.infer<typeof bookSchema>) => {
     console.log("Submited:", data);
-    updateBook.mutate(
-      {
-        id: book?.id ?? 0,
+    if (type === "edit") {
+      updateBook.mutate(
+        {
+          id: book?.id ?? 0,
+          author: data.author,
+          title: data.title,
+          publisher: data.publisher,
+          publicationDate: new Date(data.publicationDate),
+          categoryId: Number(data.category),
+        },
+        {
+          onSuccess: () => {
+            setRefreshKey(refreshKey + 1);
+            form.reset();
+            setOpen(false);
+          },
+        },
+      );
+    } else if (type === "create") {
+      createBook.mutate({
         author: data.author,
         title: data.title,
         publisher: data.publisher,
         publicationDate: new Date(data.publicationDate),
         categoryId: Number(data.category),
-      },
-      {
-        onSuccess: () => {
-          setRefreshKey(refreshKey + 1);
-          form.reset();
-          setOpen(false);
-        },
-      },
-    );
+      });
+    }
     setOpen(false);
   };
 
@@ -131,7 +142,11 @@ export default function ActionDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{type === "edit" ? "Edit" : "Delete"} book</DialogTitle>
+          <DialogTitle>
+            {type === "edit" && "Edit "}
+            {type === "delete" && "Delete "}
+            {type === "create" && "Create "} Book
+          </DialogTitle>
         </DialogHeader>
         {type === "delete" && (
           <>
@@ -155,7 +170,7 @@ export default function ActionDialog({
             </DialogFooter>
           </>
         )}
-        {type === "edit" && (
+        {(type === "edit" || type === "create") && (
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}

@@ -9,6 +9,13 @@ export const BookQuerySchema = z.object({
   limit: z.number().optional(),
   offset: z.number().optional(),
 });
+export const CreateBookQuerySchema = z.object({
+  title: z.string(),
+  author: z.string(),
+  publisher: z.string(),
+  publicationDate: z.date(),
+  categoryId: z.number(),
+});
 export const UpdateBookQuerySchema = z.object({
   id: z.number(),
   title: z.string().optional(),

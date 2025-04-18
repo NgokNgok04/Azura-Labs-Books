@@ -1,6 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import type {
   BookQueryType,
+  CreateBookType,
   DeleteBookType,
   UpdateBookType,
 } from "../types/book";
@@ -16,6 +17,30 @@ export const getAllBooks = async (db: PrismaClient, input: BookQueryType) => {
   });
 
   return books;
+};
+
+export const createBook = async (db: PrismaClient, input: CreateBookType) => {
+  console.log("Received input:", input);
+  const checkBook = await db.book.findFirst({
+    where: {
+      title: input.title,
+    },
+  });
+
+  if (checkBook) {
+    handleError("Book with that title already exist", "BAD_REQUEST");
+    return;
+  }
+
+  return await db.book.create({
+    data: {
+      author: input.author,
+      title: input.title,
+      publicationDate: input.publicationDate,
+      categoryId: input.categoryId,
+      publisher: input.publisher,
+    },
+  });
 };
 
 export const editBook = async (db: PrismaClient, input: UpdateBookType) => {

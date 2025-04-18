@@ -11,7 +11,16 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import {
+  Book,
+  BookA,
+  BookDown,
+  BookPlusIcon,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 import * as React from "react";
 
@@ -47,6 +56,7 @@ export type Book = {
 interface DataTableProps {
   setOpenEdit: (open: boolean) => void;
   setOpenDelete: (open: boolean) => void;
+  setOpenCreate: (open: boolean) => void;
   setSelectedBook: (book: Book) => void;
   onRegisterRefetch: (refetchFn: () => void) => void;
 }
@@ -54,6 +64,7 @@ interface DataTableProps {
 export default function DataTable({
   setOpenEdit,
   setOpenDelete,
+  setOpenCreate,
   setSelectedBook,
   onRegisterRefetch,
 }: DataTableProps) {
@@ -208,7 +219,7 @@ export default function DataTable({
 
   return (
     <div className="font-base text-main-foreground w-full">
-      <div className="flex items-center py-4">
+      <div className="flex items-center justify-between py-4">
         <Input
           placeholder="Filter..."
           value={(table.getColumn("author")?.getFilterValue() as string) ?? ""}
@@ -217,6 +228,12 @@ export default function DataTable({
           }
           className="max-w-sm"
         />
+        <div className="flex w-[210px] justify-between">
+          <Button className="bg-[#ff4d50]">
+            <Trash2 />
+          </Button>
+          <Button onClick={() => setOpenCreate(true)}>Create New Book</Button>
+        </div>
       </div>
       <div>
         <Table

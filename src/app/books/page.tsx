@@ -6,6 +6,7 @@ import { useState } from "react";
 export default function Books() {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [openCreate, setOpenCreate] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const [refetchTrigger, setRefetchTrigger] = useState<() => void>(() => {
     console.log();
@@ -29,10 +30,18 @@ export default function Books() {
         setRefreshKey={setRefreshKey}
         refreshKey={refreshKey}
       />
+      <ActionDialog
+        type="create"
+        open={openCreate}
+        setOpen={setOpenCreate}
+        refreshKey={refreshKey}
+        setRefreshKey={setRefreshKey}
+      />
       <DataTable
         key={refreshKey}
         setOpenEdit={setOpenEdit}
         setOpenDelete={setOpenDelete}
+        setOpenCreate={setOpenCreate}
         setSelectedBook={setSelectedBook}
         onRegisterRefetch={setRefetchTrigger}
       />
