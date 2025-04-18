@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Category" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
 
     CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
@@ -8,14 +8,12 @@ CREATE TABLE "Category" (
 
 -- CreateTable
 CREATE TABLE "Book" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "author" TEXT NOT NULL,
     "publisher" TEXT NOT NULL,
     "publicationDate" TIMESTAMP(3) NOT NULL,
-    "categoryId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
+    "categoryId" INTEGER NOT NULL,
 
     CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
 );

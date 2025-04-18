@@ -2,7 +2,10 @@ import { type Book } from "@prisma/client";
 
 export type BookQueryType = {
   id?: number;
-  code?: string;
+  title?: string;
+  author?: string;
+  publisher?: string;
+  publicationDate?: Date;
   limit?: number;
   offset?: number;
 };
