@@ -11,7 +11,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import * as React from "react";
 
@@ -45,102 +45,14 @@ export type Book = {
   categoryId: number;
 };
 
-export const columns: ColumnDef<Book>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          className="p-0"
-          checked={
-            table.getIsAllPageRowsSelected() ||
-            (table.getIsSomePageRowsSelected() && "indeterminate")
-          }
-          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-          aria-label="Select all"
-        />
-      </div>
-    ),
-    cell: ({ row }) => (
-      <div className="flex items-center justify-center">
-        <Checkbox
-          className="p-0"
-          checked={row.getIsSelected()}
-          onCheckedChange={(value) => row.toggleSelected(!!value)}
-          aria-label="Select row"
-        />
-      </div>
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("title")}</div>
-    ),
-  },
-  {
-    accessorKey: "author",
-    header: "Author",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("author")}</div>
-    ),
-  },
-
-  {
-    accessorKey: "publisher",
-    header: "Publisher",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("publisher")}</div>
-    ),
-  },
-  {
-    accessorKey: "publicationDate",
-    header: "Publication Date",
-    cell: ({ row }) => {
-      const date = new Date(row.getValue("publicationDate"));
-      const formattedDate = date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-      return <div>{formattedDate}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const books = row.original;
-
-      return (
-        <div className="flex items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="noShadow" className="size-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="bg-white">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem className="bg-white">
-                Edit Book
-              </DropdownMenuItem>
-              <DropdownMenuItem className="bg-white">
-                Delete Book
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
-    },
-  },
-];
-
-export default function DataTableDemo() {
+interface DataTableProps {
+  setOpenEdit: (open: boolean) => void;
+  setOpenDelete: (open: boolean) => void;
+}
+export default function DataTable({
+  setOpenEdit,
+  setOpenDelete,
+}: DataTableProps) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -149,6 +61,112 @@ export default function DataTableDemo() {
   useEffect(() => {
     console.log(booksData.data);
   }, [booksData.data]);
+
+  const columns: ColumnDef<Book>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            className="p-0"
+            checked={
+              table.getIsAllPageRowsSelected() ||
+              (table.getIsSomePageRowsSelected() && "indeterminate")
+            }
+            onCheckedChange={(value) =>
+              table.toggleAllPageRowsSelected(!!value)
+            }
+            aria-label="Select all"
+          />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <div className="flex items-center justify-center">
+          <Checkbox
+            className="p-0"
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(!!value)}
+            aria-label="Select row"
+          />
+        </div>
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("title")}</div>
+      ),
+    },
+    {
+      accessorKey: "author",
+      header: "Author",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("author")}</div>
+      ),
+    },
+
+    {
+      accessorKey: "publisher",
+      header: "Publisher",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("publisher")}</div>
+      ),
+    },
+    {
+      accessorKey: "publicationDate",
+      header: "Publication Date",
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("publicationDate"));
+        const formattedDate = date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div>{formattedDate}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const books = row.original;
+
+        return (
+          <div className="flex items-center justify-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="noShadow" className="size-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-[#e0ecfc]">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem className="bg-[#e0ecfc]">
+                  <div className="flex gap-2">
+                    <Pencil />
+                    <button onClick={() => setOpenEdit(true)}>Edit Book</button>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="bg-[#e0ecfc]">
+                  <div className="flex gap-2">
+                    <Trash2 />
+                    <button onClick={() => setOpenDelete(true)}>
+                      Delete Book
+                    </button>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
+    },
+  ];
+
   const table = useReactTable({
     data: booksData.data ?? [],
     columns,

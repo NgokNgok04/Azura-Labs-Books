@@ -6,6 +6,7 @@ export type BookQueryType = {
   author?: string;
   publisher?: string;
   publicationDate?: Date;
+  categoryId?: number;
   limit?: number;
   offset?: number;
 };

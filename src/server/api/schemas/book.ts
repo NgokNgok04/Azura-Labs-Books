@@ -5,6 +5,14 @@ export const BookQuerySchema = z.object({
   title: z.string().optional(),
   author: z.string().optional(),
   publisher: z.string().optional(),
+  categoryId: z.number().optional(),
   limit: z.number().optional(),
   offset: z.number().optional(),
+});
+export const UpdateBookQuerySchema = z.object({
+  id: z.number(),
+  title: z.string().optional(),
+  author: z.string().optional(),
+  publisher: z.string().optional(),
+  categoryId: z.number().optional(),
 });
