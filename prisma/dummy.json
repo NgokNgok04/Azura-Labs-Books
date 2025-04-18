@@ -1,0 +1,329 @@
+{
+  "categories": [
+    { "id": "edu", "name": "Education" },
+    { "id": "fic", "name": "Fiction" },
+    { "id": "phi", "name": "Philosophy" }
+  ],
+  "books": [
+    {
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "publisher": "Penguin",
+      "publicationDate": "2018-10-16",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The 7 Habits of Highly Effective People",
+      "author": "Stephen R. Covey",
+      "publisher": "Free Press",
+      "publicationDate": "1989-08-15",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "Filosofi Teras",
+      "author": "Henry Manampiring",
+      "publisher": "Kompas Gramedia",
+      "publicationDate": "2018-09-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Laut Bercerita",
+      "author": "Leila S. Chudori",
+      "publisher": "Kepustakaan Populer Gramedia",
+      "publicationDate": "2017-10-01",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Harry Potter and the Sorcerer's Stone",
+      "author": "J.K. Rowling",
+      "publisher": "Bloomsbury",
+      "publicationDate": "1997-06-26",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Pulang",
+      "author": "Tere Liye",
+      "publisher": "Republika Penerbit",
+      "publicationDate": "2015-07-10",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Sapiens: A Brief History of Humankind",
+      "author": "Yuval Noah Harari",
+      "publisher": "Harvill Secker",
+      "publicationDate": "2011-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Educated",
+      "author": "Tara Westover",
+      "publisher": "Random House",
+      "publicationDate": "2018-02-20",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Alchemist",
+      "author": "Paulo Coelho",
+      "publisher": "HarperOne",
+      "publicationDate": "1988-05-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Negeri 5 Menara",
+      "author": "Ahmad Fuadi",
+      "publisher": "Gramedia Pustaka Utama",
+      "publicationDate": "2009-08-15",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Power of Now",
+      "author": "Eckhart Tolle",
+      "publisher": "New World Library",
+      "publicationDate": "1997-10-06",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Mindset",
+      "author": "Carol S. Dweck",
+      "publisher": "Random House",
+      "publicationDate": "2006-02-28",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "To Kill a Mockingbird",
+      "author": "Harper Lee",
+      "publisher": "J.B. Lippincott & Co.",
+      "publicationDate": "1960-07-11",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "1984",
+      "author": "George Orwell",
+      "publisher": "Secker & Warburg",
+      "publicationDate": "1949-06-08",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Subtle Art of Not Giving a F*ck",
+      "author": "Mark Manson",
+      "publisher": "Harper",
+      "publicationDate": "2016-09-13",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Ikigai",
+      "author": "Hector Garcia",
+      "publisher": "Penguin Books",
+      "publicationDate": "2016-09-27",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Man's Search for Meaning",
+      "author": "Viktor E. Frankl",
+      "publisher": "Beacon Press",
+      "publicationDate": "1946-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Rich Dad Poor Dad",
+      "author": "Robert T. Kiyosaki",
+      "publisher": "Plata Publishing",
+      "publicationDate": "1997-04-01",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Catcher in the Rye",
+      "author": "J.D. Salinger",
+      "publisher": "Little, Brown and Company",
+      "publicationDate": "1951-07-16",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Book Thief",
+      "author": "Markus Zusak",
+      "publisher": "Picador",
+      "publicationDate": "2005-03-14",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Stranger",
+      "author": "Albert Camus",
+      "publisher": "Gallimard",
+      "publicationDate": "1942-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Thinking, Fast and Slow",
+      "author": "Daniel Kahneman",
+      "publisher": "Farrar, Straus and Giroux",
+      "publicationDate": "2011-10-25",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "publisher": "Charles Scribner's Sons",
+      "publicationDate": "1925-04-10",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Brave New World",
+      "author": "Aldous Huxley",
+      "publisher": "Chatto & Windus",
+      "publicationDate": "1932-08-30",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Art of War",
+      "author": "Sun Tzu",
+      "publisher": "Various",
+      "publicationDate": "-500-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Quiet",
+      "author": "Susan Cain",
+      "publisher": "Crown Publishing Group",
+      "publicationDate": "2012-01-24",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "Animal Farm",
+      "author": "George Orwell",
+      "publisher": "Secker & Warburg",
+      "publicationDate": "1945-08-17",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Road",
+      "author": "Cormac McCarthy",
+      "publisher": "Alfred A. Knopf",
+      "publicationDate": "2006-09-26",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Letters from a Stoic",
+      "author": "Seneca",
+      "publisher": "Penguin Classics",
+      "publicationDate": "65-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Drive",
+      "author": "Daniel H. Pink",
+      "publisher": "Riverhead Books",
+      "publicationDate": "2009-12-29",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Little Prince",
+      "author": "Antoine de Saint-Exupéry",
+      "publisher": "Reynal & Hitchcock",
+      "publicationDate": "1943-04-06",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Zen and the Art of Motorcycle Maintenance",
+      "author": "Robert M. Pirsig",
+      "publisher": "William Morrow",
+      "publicationDate": "1974-04-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "How to Win Friends and Influence People",
+      "author": "Dale Carnegie",
+      "publisher": "Simon and Schuster",
+      "publicationDate": "1936-10-01",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Fault in Our Stars",
+      "author": "John Green",
+      "publisher": "Dutton Books",
+      "publicationDate": "2012-01-10",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "The Republic",
+      "author": "Plato",
+      "publisher": "Various",
+      "publicationDate": "-380-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Outliers",
+      "author": "Malcolm Gladwell",
+      "publisher": "Little, Brown and Company",
+      "publicationDate": "2008-11-18",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "Life of Pi",
+      "author": "Yann Martel",
+      "publisher": "Knopf Canada",
+      "publicationDate": "2001-09-11",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    },
+    {
+      "title": "Meditations",
+      "author": "Marcus Aurelius",
+      "publisher": "Penguin Classics",
+      "publicationDate": "180-01-01",
+      "categoryId": "phi",
+      "categoryName": "Philosophy"
+    },
+    {
+      "title": "Thinking in Systems",
+      "author": "Donella H. Meadows",
+      "publisher": "Chelsea Green Publishing",
+      "publicationDate": "2008-12-03",
+      "categoryId": "edu",
+      "categoryName": "Education"
+    },
+    {
+      "title": "The Kite Runner",
+      "author": "Khaled Hosseini",
+      "publisher": "Riverhead Books",
+      "publicationDate": "2003-05-29",
+      "categoryId": "fic",
+      "categoryName": "Fiction"
+    }
+  ]
+}
