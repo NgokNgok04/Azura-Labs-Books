@@ -1,7 +1,12 @@
 import { createRoleProtectedProcedure } from "~/server/middlewares/trpc-rbac";
 import { createTRPCRouter } from "../trpc";
 import { BookQuerySchema, UpdateBookQuerySchema } from "../schemas/book";
-import { editBook, getAllBooks, getCategories } from "../services/book";
+import {
+  deleteBook,
+  editBook,
+  getAllBooks,
+  getCategories,
+} from "../services/book";
 
 export const bookRouter = createTRPCRouter({
   getAllBooks: createRoleProtectedProcedure(["unauth"])
@@ -13,6 +18,11 @@ export const bookRouter = createTRPCRouter({
     .input(UpdateBookQuerySchema)
     .mutation(async ({ ctx, input }) => {
       return await editBook(ctx.db, input);
+    }),
+  deleteBook: createRoleProtectedProcedure(["unauth"])
+    .input(BookQuerySchema)
+    .mutation(async ({ ctx, input }) => {
+      return await deleteBook(ctx.db, input);
     }),
   getCategories: createRoleProtectedProcedure(["unauth"]).query(
     async ({ ctx }) => {

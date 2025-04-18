@@ -18,7 +18,6 @@ export default function Books() {
         open={openEdit}
         setOpen={setOpenEdit}
         book={selectedBook}
-        refetchBooks={refetchTrigger}
         setRefreshKey={setRefreshKey}
         refreshKey={refreshKey}
       />
@@ -26,6 +25,7 @@ export default function Books() {
         type="delete"
         open={openDelete}
         setOpen={setOpenDelete}
+        book={selectedBook}
         setRefreshKey={setRefreshKey}
         refreshKey={refreshKey}
       />

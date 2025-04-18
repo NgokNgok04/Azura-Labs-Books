@@ -34,9 +34,8 @@ import { useEffect } from "react";
 interface actionProps {
   type: "edit" | "delete";
   open: boolean;
-  book?: Book | null;
+  book: Book | null;
   setOpen: (open: boolean) => void;
-  onClick?: () => void;
   setRefreshKey: (value: number) => void;
   refreshKey: number;
 }
@@ -112,119 +111,158 @@ export default function ActionDialog({
     );
     setOpen(false);
   };
+
+  const deleteBook = api.book.deleteBook.useMutation();
+  const onDelete = () => {
+    deleteBook.mutate(
+      {
+        id: book?.id,
+      },
+      {
+        onSuccess: () => {
+          setRefreshKey(refreshKey + 1);
+          setOpen(false);
+        },
+      },
+    );
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{type === "edit" ? "Edit" : "Delete"} book</DialogTitle>
         </DialogHeader>
-
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col gap-3"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Azura Labs Terbaik" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="author"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Author</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Azura Siagian" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="publisher"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Publisher</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="Azura Labs" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="publicationDate"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Publication Date</FormLabel>
-                  <FormControl>
-                    <Input type="date" {...field} className="w-[160px]" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="w-[160px] bg-[#e0ecfc]">
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#e0ecfc]">
-                        {!categories.data && "No Category available"}
-                        {categories.data?.map((category) => {
-                          return (
-                            <SelectItem
-                              key={category.id}
-                              value={String(category.id)}
-                              className="bg-[#e0ecfc]"
-                            >
-                              {category.name}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {type === "delete" && (
+          <>
+            <p>
+              Are you sure you want to delete this book{" "}
+              {book?.title ? `with title ` : ""}
+              <span className="text-2xl font-bold">{book?.title}?</span>
+            </p>
             <DialogFooter>
               <DialogClose asChild>
-                <Button
-                  variant="neutral"
-                  onClick={() => {
-                    form.reset();
-                  }}
-                >
-                  Cancel
-                </Button>
+                <Button variant="neutral">Cancel</Button>
               </DialogClose>
-              <Button type="submit">Save changes</Button>
+              <Button
+                type="submit"
+                onClick={() => {
+                  onDelete();
+                }}
+              >
+                Yes, Delete
+              </Button>
             </DialogFooter>
-          </form>
-        </Form>
+          </>
+        )}
+        {type === "edit" && (
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="flex flex-col gap-3"
+            >
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Azura Labs Terbaik" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="author"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Author</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Azura Siagian" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="publisher"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Publisher</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Azura Labs" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="publicationDate"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Publication Date</FormLabel>
+                    <FormControl>
+                      <Input type="date" {...field} className="w-[160px]" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Category</FormLabel>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="w-[160px] bg-[#e0ecfc]">
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#e0ecfc]">
+                          {!categories.data && "No Category available"}
+                          {categories.data?.map((category) => {
+                            return (
+                              <SelectItem
+                                key={category.id}
+                                value={String(category.id)}
+                                className="bg-[#e0ecfc]"
+                              >
+                                {category.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button
+                    variant="neutral"
+                    onClick={() => {
+                      form.reset();
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </DialogClose>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );

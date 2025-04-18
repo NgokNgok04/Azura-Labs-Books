@@ -161,7 +161,13 @@ export default function DataTable({
                     <span>Edit Book</span>
                   </div>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="bg-[#e0ecfc]">
+                <DropdownMenuItem
+                  className="bg-[#e0ecfc]"
+                  onClick={() => {
+                    setSelectedBook(book);
+                    setOpenDelete(true);
+                  }}
+                >
                   <div className="flex gap-2">
                     <Trash2 />
                     <button onClick={() => setOpenDelete(true)}>

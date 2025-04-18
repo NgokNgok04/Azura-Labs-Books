@@ -1,5 +1,9 @@
 import type { PrismaClient } from "@prisma/client";
-import type { BookQueryType, UpdateBookType } from "../types/book";
+import type {
+  BookQueryType,
+  DeleteBookType,
+  UpdateBookType,
+} from "../types/book";
 import { handleError } from "../utils/errorHandler";
 
 export const getAllBooks = async (db: PrismaClient, input: BookQueryType) => {
@@ -46,6 +50,11 @@ export const editBook = async (db: PrismaClient, input: UpdateBookType) => {
   });
 };
 
+export const deleteBook = async (db: PrismaClient, input: DeleteBookType) => {
+  return await db.book.deleteMany({
+    where: input,
+  });
+};
 export const getCategories = async (db: PrismaClient) => {
   return await db.category.findMany();
 };
