@@ -6,7 +6,6 @@
 import { useEffect, useState } from "react";
 import {
   type ColumnDef,
-  type ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -243,7 +242,7 @@ export default function DataTable({
             placeholder="Search title, author, publisher..."
             value={globalFilter}
             onChange={(event) => setGlobalFilter(event.target.value)}
-            className="max-w-sm"
+            className="w-[250px]"
           />
           <DateRangePicker date={date} setDate={setDate} />
         </div>
