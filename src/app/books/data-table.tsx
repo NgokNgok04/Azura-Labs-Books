@@ -234,6 +234,10 @@ export default function DataTable({
     },
   });
 
+  useEffect(() => {
+    table.getColumn("publicationDate")?.setFilterValue(date);
+  }, [date, table]);
+
   return (
     <div className="font-base text-main-foreground w-full">
       <div className="flex items-center justify-between py-4">
