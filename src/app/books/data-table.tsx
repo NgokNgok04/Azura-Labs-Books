@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
@@ -37,7 +38,11 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { api } from "~/trpc/react";
-
+import {
+  // DatePickerWithRange,
+  DateRangePicker,
+} from "~/components/ui/date-picker-range";
+import { type DateRange } from "react-day-picker";
 export type Book = {
   id: number;
   title: string;
@@ -63,8 +68,7 @@ export default function DataTable({
   onRegisterRefetch,
 }: DataTableProps) {
   const [globalFilter, setGlobalFilter] = useState("");
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-
+  const [date, setDate] = useState<DateRange | undefined>();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -139,6 +143,18 @@ export default function DataTable({
         });
         return <div>{formattedDate}</div>;
       },
+      filterFn: (row, columnId, filterValue) => {
+        const rowDate = new Date(row.getValue(columnId));
+        const from = filterValue?.from;
+        const to = filterValue?.to;
+
+        if (from && to) {
+          return rowDate >= from && rowDate <= to;
+        }
+        if (from) return rowDate >= from;
+        if (to) return rowDate <= to;
+        return true;
+      },
     },
     {
       id: "actions",
@@ -207,7 +223,6 @@ export default function DataTable({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
-      columnFilters,
       globalFilter,
       columnVisibility,
       rowSelection,
@@ -223,12 +238,15 @@ export default function DataTable({
   return (
     <div className="font-base text-main-foreground w-full">
       <div className="flex items-center justify-between py-4">
-        <Input
-          placeholder="Search title, author, publisher..."
-          value={globalFilter}
-          onChange={(event) => setGlobalFilter(event.target.value)}
-          className="max-w-sm"
-        />
+        <div className="flex gap-4">
+          <Input
+            placeholder="Search title, author, publisher..."
+            value={globalFilter}
+            onChange={(event) => setGlobalFilter(event.target.value)}
+            className="max-w-sm"
+          />
+          <DateRangePicker date={date} setDate={setDate} />
+        </div>
         <div className="flex w-[210px] justify-between">
           <Button className="bg-[#ff4d50]">
             <Trash2 />
