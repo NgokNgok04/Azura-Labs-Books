@@ -88,9 +88,11 @@ export default function ActionDialog({
     }
   }, [book, type, form]);
 
-  const categories = api.book.getCategories.useQuery();
+  const categories = api.category.getCategories.useQuery();
   const updateBook = api.book.editBook.useMutation();
   const createBook = api.book.createBook.useMutation();
+  const deleteBook = api.book.deleteBook.useMutation();
+
   const onSubmit = (data: z.infer<typeof bookSchema>) => {
     console.log("Submited:", data);
     if (type === "edit") {
@@ -123,7 +125,6 @@ export default function ActionDialog({
     setOpen(false);
   };
 
-  const deleteBook = api.book.deleteBook.useMutation();
   const onDelete = () => {
     deleteBook.mutate(
       {

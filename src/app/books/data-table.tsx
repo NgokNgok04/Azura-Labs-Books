@@ -14,7 +14,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { Edit, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
+import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
 
 import * as React from "react";
 
@@ -40,6 +40,7 @@ import {
 import { api } from "~/trpc/react";
 import { DateRangePicker } from "~/components/ui/date-picker-range";
 import { type DateRange } from "react-day-picker";
+import type { Category } from "@prisma/client";
 export type Book = {
   id: number;
   title: string;
@@ -50,17 +51,17 @@ export type Book = {
 };
 
 interface DataTableProps {
-  setOpenEdit: (open: boolean) => void;
-  setOpenDelete: (open: boolean) => void;
-  setOpenCreate: (open: boolean) => void;
+  setOpenEditBook: (open: boolean) => void;
+  setOpenDeleteBook: (open: boolean) => void;
+  setOpenCreateBook: (open: boolean) => void;
   setSelectedBook: (book: Book) => void;
   onRegisterRefetch: (refetchFn: () => void) => void;
 }
 
 export default function DataTable({
-  setOpenEdit,
-  setOpenDelete,
-  setOpenCreate,
+  setOpenEditBook,
+  setOpenDeleteBook,
+  setOpenCreateBook,
   setSelectedBook,
   onRegisterRefetch,
 }: DataTableProps) {
@@ -69,9 +70,9 @@ export default function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
   const { data: fetchBook, refetch } = api.book.getAllBooks.useQuery({});
-  const { data: categories } = api.book.getCategories.useQuery();
+  const { data: categories } = api.category.getCategories.useQuery();
   useEffect(() => {
     onRegisterRefetch(refetch);
   }, [refetch, onRegisterRefetch]);
@@ -188,7 +189,7 @@ export default function DataTable({
                   className="bg-[#e0ecfc]"
                   onClick={() => {
                     setSelectedBook(book);
-                    setOpenEdit(true);
+                    setOpenEditBook(true);
                   }}
                 >
                   <div className="flex gap-2">
@@ -200,12 +201,12 @@ export default function DataTable({
                   className="bg-[#e0ecfc]"
                   onClick={() => {
                     setSelectedBook(book);
-                    setOpenDelete(true);
+                    setOpenDeleteBook(true);
                   }}
                 >
                   <div className="flex gap-2">
                     <Trash2 />
-                    <button onClick={() => setOpenDelete(true)}>
+                    <button onClick={() => setOpenDeleteBook(true)}>
                       Delete Book
                     </button>
                   </div>
@@ -246,9 +247,9 @@ export default function DataTable({
       );
     },
   });
-
   useEffect(() => {
-    table.getColumn("categoryId")?.setFilterValue(selectedCategories);
+    const categoryIds = selectedCategories.map((cat) => String(cat.id));
+    table.getColumn("categoryId")?.setFilterValue(categoryIds);
   }, [selectedCategories, table]);
 
   useEffect(() => {
@@ -284,12 +285,12 @@ export default function DataTable({
                 >
                   <label className="flex cursor-pointer items-center gap-2">
                     <Checkbox
-                      checked={selectedCategories.includes(String(cat.id))}
+                      checked={selectedCategories.includes(cat)}
                       onCheckedChange={(checked) => {
                         setSelectedCategories((prev) =>
                           checked
-                            ? [...prev, String(cat.id)]
-                            : prev.filter((id) => id !== String(cat.id)),
+                            ? [...prev, cat]
+                            : prev.filter((catid) => catid.id !== cat.id),
                         );
                       }}
                     />
@@ -297,19 +298,6 @@ export default function DataTable({
                   </label>
                 </DropdownMenuItem>
               ))}
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="bg-[#e0ecfc]">
-                <Plus size={16} />
-                <span>Add Category</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="bg-[#e0ecfc]">
-                <Edit size={16} />
-                <span>Edit Category</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="bg-[#e0ecfc]">
-                <Trash2 size={16} />
-                <span>Delete Category</span>
-              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -317,7 +305,9 @@ export default function DataTable({
           <Button className="bg-[#ff4d50]">
             <Trash2 />
           </Button>
-          <Button onClick={() => setOpenCreate(true)}>Create New Book</Button>
+          <Button onClick={() => setOpenCreateBook(true)}>
+            Create New Book
+          </Button>
         </div>
       </div>
       <div>

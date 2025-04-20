@@ -1,5 +1,9 @@
 import type { PrismaClient } from "@prisma/client";
-import type { CreateCategoryType, DeleteCategoryType } from "../types/category";
+import type {
+  CreateCategoryType,
+  DeleteCategoryType,
+  UpdateCategoryType,
+} from "../types/category";
 import { handleError } from "../utils/errorHandler";
 
 export const getCategories = async (db: PrismaClient) => {
@@ -29,6 +33,29 @@ export const createCategory = async (
   });
 };
 
+export const updateCategory = async (
+  db: PrismaClient,
+  input: UpdateCategoryType,
+) => {
+  const checkCategory = await db.category.findFirst({
+    where: {
+      name: input.name,
+    },
+  });
+
+  if (checkCategory) {
+    handleError("Book with that title already exist", "BAD_REQUEST");
+    return;
+  }
+  return await db.category.update({
+    where: {
+      id: input.id,
+    },
+    data: {
+      name: input.name,
+    },
+  });
+};
 export const deleteCategory = async (
   db: PrismaClient,
   input: DeleteCategoryType,

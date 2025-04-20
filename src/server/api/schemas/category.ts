@@ -5,10 +5,11 @@ export const CreateCategorySchema = z.object({
 });
 
 export const UpdateCategorySchema = z.object({
+  id: z.number(),
   name: z.string().optional(),
 });
 
 export const DeleteCategorySchema = z.object({
-  id: z.number().optional(),
+  id: z.union([z.number(), z.object({ in: z.array(z.number()) })]),
   name: z.string().optional(),
 });

@@ -4,10 +4,12 @@ import {
   createCategory,
   deleteCategory,
   getCategories,
+  updateCategory,
 } from "../services/category";
 import {
   CreateCategorySchema,
   DeleteCategorySchema,
+  UpdateCategorySchema,
 } from "../schemas/category";
 
 export const categoryRouter = createTRPCRouter({
@@ -25,5 +27,10 @@ export const categoryRouter = createTRPCRouter({
     .input(DeleteCategorySchema)
     .mutation(async ({ ctx, input }) => {
       return await deleteCategory(ctx.db, input);
+    }),
+  editCategory: createRoleProtectedProcedure(["unauth"])
+    .input(UpdateCategorySchema)
+    .mutation(async ({ ctx, input }) => {
+      return await updateCategory(ctx.db, input);
     }),
 });
