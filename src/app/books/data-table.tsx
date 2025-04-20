@@ -14,7 +14,7 @@ import {
   useReactTable,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Edit, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
 
 import * as React from "react";
 
@@ -25,6 +25,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Input } from "~/components/ui/input";
@@ -37,10 +38,7 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { api } from "~/trpc/react";
-import {
-  // DatePickerWithRange,
-  DateRangePicker,
-} from "~/components/ui/date-picker-range";
+import { DateRangePicker } from "~/components/ui/date-picker-range";
 import { type DateRange } from "react-day-picker";
 export type Book = {
   id: number;
@@ -71,8 +69,9 @@ export default function DataTable({
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const { data: fetchBook, refetch } = api.book.getAllBooks.useQuery({});
-
+  const { data: categories } = api.book.getCategories.useQuery();
   useEffect(() => {
     onRegisterRefetch(refetch);
   }, [refetch, onRegisterRefetch]);
@@ -122,7 +121,21 @@ export default function DataTable({
         <div className="capitalize">{row.getValue("author")}</div>
       ),
     },
-
+    {
+      accessorKey: "categoryId",
+      header: "Category",
+      cell: ({ row }) => {
+        const category = categories?.find(
+          (cat) => cat.id === row.getValue("categoryId"),
+        );
+        return <div>{category?.name ?? "Unknown"}</div>;
+      },
+      filterFn: (row, columnId, filterValue) => {
+        if (!Array.isArray(filterValue) || filterValue.length === 0)
+          return true;
+        return filterValue.includes(String(row.getValue(columnId)));
+      },
+    },
     {
       accessorKey: "publisher",
       header: "Publisher",
@@ -235,6 +248,10 @@ export default function DataTable({
   });
 
   useEffect(() => {
+    table.getColumn("categoryId")?.setFilterValue(selectedCategories);
+  }, [selectedCategories, table]);
+
+  useEffect(() => {
     table.getColumn("publicationDate")?.setFilterValue(date);
   }, [date, table]);
 
@@ -249,6 +266,52 @@ export default function DataTable({
             className="w-[250px]"
           />
           <DateRangePicker date={date} setDate={setDate} />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button className="bg-[#5894fc]">Filter Categories</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-60 bg-[#e0ecfc]">
+              <DropdownMenuLabel className="flex items-center justify-between">
+                List Category
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {categories?.map((cat) => (
+                <DropdownMenuItem
+                  key={cat.id}
+                  onSelect={(e) => e.preventDefault()}
+                  asChild
+                  className="bg-[#e0ecfc]"
+                >
+                  <label className="flex cursor-pointer items-center gap-2">
+                    <Checkbox
+                      checked={selectedCategories.includes(String(cat.id))}
+                      onCheckedChange={(checked) => {
+                        setSelectedCategories((prev) =>
+                          checked
+                            ? [...prev, String(cat.id)]
+                            : prev.filter((id) => id !== String(cat.id)),
+                        );
+                      }}
+                    />
+                    {cat.name}
+                  </label>
+                </DropdownMenuItem>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="bg-[#e0ecfc]">
+                <Plus size={16} />
+                <span>Add Category</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="bg-[#e0ecfc]">
+                <Edit size={16} />
+                <span>Edit Category</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="bg-[#e0ecfc]">
+                <Trash2 size={16} />
+                <span>Delete Category</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         <div className="flex w-[210px] justify-between">
           <Button className="bg-[#ff4d50]">

@@ -37,6 +37,7 @@ export default function Books() {
         refreshKey={refreshKey}
         setRefreshKey={setRefreshKey}
       />
+      <h1 className="w-full text-4xl font-bold">Welcome to Books!</h1>
       <DataTable
         key={refreshKey}
         setOpenEdit={setOpenEdit}
