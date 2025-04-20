@@ -10,7 +10,6 @@ import {
   deleteBook,
   editBook,
   getAllBooks,
-  getCategories,
 } from "../services/book";
 
 export const bookRouter = createTRPCRouter({
@@ -34,9 +33,4 @@ export const bookRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return await deleteBook(ctx.db, input);
     }),
-  getCategories: createRoleProtectedProcedure(["unauth"]).query(
-    async ({ ctx }) => {
-      return await getCategories(ctx.db);
-    },
-  ),
 });

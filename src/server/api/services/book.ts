@@ -80,6 +80,3 @@ export const deleteBook = async (db: PrismaClient, input: DeleteBookType) => {
     where: input,
   });
 };
-export const getCategories = async (db: PrismaClient) => {
-  return await db.category.findMany();
-};

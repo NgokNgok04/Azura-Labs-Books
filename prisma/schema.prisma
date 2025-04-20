@@ -27,5 +27,5 @@ model Book {
   publisher      String
   publicationDate DateTime
   categoryId     Int
-  category       Category @relation(fields: [categoryId], references: [id])
+  category       Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 }

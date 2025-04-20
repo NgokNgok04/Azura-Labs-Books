@@ -19,6 +19,5 @@ export type DeleteBookType = {
   publicationDate?: Date;
   categoryId?: number;
 };
-
 export type UpdateBookType = Partial<Book>;
 export type CreateBookType = Required<Omit<Book, "id">>;
